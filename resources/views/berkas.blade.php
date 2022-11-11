@@ -110,15 +110,12 @@
         <!-- /.col -->
       </div>
 @endsection
+
 @section('script')
 <!-- Bootstrap 4 -->
 <script src="{{asset('template')}}/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <!-- AdminLTE App -->
 <script src="{{asset('template')}}/dist/js/adminlte.min.js"></script>
-<!-- AdminLTE for demo purposes -->
-<script src="{{asset('template')}}/dist/js/demo.js"></script>
-<!-- page script -->
-
 <!-- script datatables dan JQuery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.js"></script>
@@ -238,7 +235,7 @@
 
           if(Array.isArray(berkas) && berkas.length){
             for(let i=0; i<berkas.length; i++){
-              elemen += '<a href="http://192.168.1.10/webapps/berkasrawat/'+res.berkas[i].lokasi_file+'">'+res.berkas[i].nama+'</a><br>'
+              elemen += '<a href="http://192.168.1.10/webapps/berkasrawat/'+res.berkas[i].lokasi_file+'" target="_blank" rel="noopener noreferrer" >'+res.berkas[i].nama+'</a><br>'
             }
             $('#berkas').html(elemen)
           }

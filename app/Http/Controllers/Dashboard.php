@@ -22,6 +22,6 @@ class Dashboard extends Controller
         $berkas = DB::table('berkas_digital_perawatan')->distinct('no_rawat')->count();
 
 
-        return view('Dashboard',compact('sep','kunjungan','pasien','berkas','user'));
+        return view('dashboard',compact('sep','kunjungan','pasien','berkas','user'));
     }
 }

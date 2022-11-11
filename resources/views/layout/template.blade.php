@@ -39,13 +39,13 @@
     <ul class="navbar-nav ml-auto">
      <li class="nav-item dropdown user-menu">
         <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
-          <img src="{{asset('template')}}/dist/img/user2-160x160.jpg" class="user-image img-circle elevation-2" alt="User Image">
+          <img src="{{asset('template')}}/dist/img/avatar2.png" class="user-image img-circle elevation-2" alt="User Image">
           <span class="d-none d-md-inline">{{$user->name}}</span>
         </a>
         <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
           <!-- User image -->
           <li class="user-header bg-primary">
-            <img src="{{asset('template')}}/dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
+            <img src="{{asset('template')}}/dist/img/avatar2.png" class="img-circle elevation-2" alt="User Image">
             <p>
               {{$user->name}}
             </p>
@@ -88,7 +88,7 @@
     <strong>Copyright &copy; 2022 IT PBB HOLDING.</strong>
     All rights reserved.
     <div class="float-right d-none d-sm-inline-block">
-      <b>Version</b> 3.0.4
+      <b>Version</b> 1.0.0
     </div>
   </footer>
 
