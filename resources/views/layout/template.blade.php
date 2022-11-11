@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -17,11 +16,11 @@
         <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
       </li>
       <li class="nav-item d-none d-sm-inline-block">
-        <a href="index3.html" class="nav-link">Home</a>
+        <a href="/dashboard" class="nav-link">Home</a>
       </li>
-      <li class="nav-item d-none d-sm-inline-block">
+      <!-- <li class="nav-item d-none d-sm-inline-block">
         <a href="#" class="nav-link">Contact</a>
-      </li>
+      </li> -->
     </ul>
 
     <!-- SEARCH FORM -->
@@ -38,18 +37,17 @@
 
     <!-- Right navbar links -->
     <ul class="navbar-nav ml-auto">
-    <li class="nav-item dropdown user-menu">
+     <li class="nav-item dropdown user-menu">
         <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
           <img src="{{asset('template')}}/dist/img/user2-160x160.jpg" class="user-image img-circle elevation-2" alt="User Image">
-          <span class="d-none d-md-inline">Alexander Pierce</span>
+          <span class="d-none d-md-inline">{{$user->name}}</span>
         </a>
         <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
           <!-- User image -->
           <li class="user-header bg-primary">
             <img src="{{asset('template')}}/dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
             <p>
-              Alexander Pierce - Web Developer
-              <small>Member since Nov. 2012</small>
+              {{$user->name}}
             </p>
           </li>
           <!-- Menu Footer-->

@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class Dashboard extends Controller
 {
@@ -10,7 +13,15 @@ class Dashboard extends Controller
     {
         $this->middleware('auth');
     }
+
     public function index(){
-        return(view('Dashboard'));
+        $user = auth()->user();
+        $sep = DB::table('bridging_sep')->count();
+        $kunjungan = DB::table('reg_periksa')->count();
+        $pasien = DB::table('pasien')->count();
+        $berkas = DB::table('berkas_digital_perawatan')->distinct('no_rawat')->count();
+
+
+        return view('Dashboard',compact('sep','kunjungan','pasien','berkas','user'));
     }
 }

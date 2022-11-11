@@ -16,6 +16,8 @@ class BerkasDigital extends Controller
 
         public function index(Request $request)
         {
+                $user = auth()->user();
+
                 $now=Carbon::now()->toDateString();
 
                 if(request()->ajax()){
@@ -52,7 +54,7 @@ class BerkasDigital extends Controller
                                 ->rawColumns(['file'])
                                 ->make(true);
                 }
-                return view('berkas',compact('now'));
+                return view('berkas',compact('now','user'));
         }
 
 

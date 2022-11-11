@@ -57,7 +57,7 @@
                   <p id="diagnosa"></p>
                 </div>
                 <h5>Berkas Perawatan Digital</h5>
-                <div id=div1>
+                <div>
                   <p id="berkas"></p>
                 </div>
               </div>
@@ -223,10 +223,18 @@
 
           $('#sep').html         ('No SEP             : ' + res.kunjungan.sep)
           $('#noka').html        ('No BPJS            : ' + res.kunjungan.noka)
-          $('#diagnosa').html    ('Diagnosa Utama     : ' + res.diagnosa.kd_penyakit + ' ' + res.diagnosa.nm_penyakit)
-
+          
+          
+          let diagnosa = res.diagnosa;
           let berkas = res.berkas;
           let elemen = '';
+
+          if(diagnosa === null){
+            $('#diagnosa').html('Diagnosa Utama : TIDAK ADA DIAGNOSA')
+          }
+          else{
+            $('#diagnosa').html('Diagnosa Utama : ' + res.diagnosa.kd_penyakit + ' ' + res.diagnosa.nm_penyakit)
+          }
 
           if(Array.isArray(berkas) && berkas.length){
             for(let i=0; i<berkas.length; i++){
@@ -235,7 +243,7 @@
             $('#berkas').html(elemen)
           }
           else{
-            $('#berkas').html('<a> TIDAK ADA BERKAS </a>')
+            $('#berkas').html('TIDAK ADA BERKAS')
           }
         }
       })
