@@ -240,9 +240,11 @@ $(function () {
             $('#diagnosa').html('Diagnosa Utama : ' + res.diagnosa.kd_penyakit + ' ' + res.diagnosa.nm_penyakit)
           }
 
+          var url = "{{ URL::asset('/template/berkas') }}";
+
           if(Array.isArray(berkas) && berkas.length){
             for(let i=0; i<berkas.length; i++){
-              elemen += '<a href="http://192.168.1.10/webapps/berkasrawat/'+res.berkas[i].lokasi_file+'" target="_blank" rel="noopener noreferrer" >'+res.berkas[i].nama+'</a><br>'
+              elemen += '<a href="'+ url + '/'+ res.berkas[i].lokasi_file+'" target="_blank" rel="noopener noreferrer" >'+res.berkas[i].nama+'</a><br>'
             }
             $('#berkas').html(elemen)
           }
