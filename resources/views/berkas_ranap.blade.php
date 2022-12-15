@@ -222,7 +222,7 @@ $(function () {
           $('#alamat').html      ('Alamat          : ' + res.kunjungan.alamat)
 
           $('#tgl_reg').html     ('Tgl Registrasi     : ' + res.kunjungan.tgl_reg)
-          $('#poli').html        ('Poliklinik         : ' + res.kunjungan.poli)
+          $('#poli').html        ('Kelas Rawat        : ' + res.kunjungan.poli)
           $('#dokter').html      ('Dokter             : ' + res.kunjungan.dokter)
           $('#status').html      ('Status             : ' + $status)
 
