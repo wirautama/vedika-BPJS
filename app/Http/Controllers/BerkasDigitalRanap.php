@@ -72,7 +72,7 @@ class BerkasDigitalRanap extends Controller
                         ->where('a.no_rawat','=',$no_rawat)
                         ->select('a.no_rawat as no_rawat', 'a.no_rkm_medis AS no_rkm_medis', 
                                 'd.nm_pasien AS nm_pasien', 'd.umur AS umur', 'd.jk AS jk', 'd.alamat AS alamat',
-                                'a.tgl_registrasi AS tgl_reg', 'a.jam_reg AS jam_reg', 'c.klsrwt AS poli', 
+                                'a.tgl_registrasi AS tgl_reg', 'a.jam_reg AS jam_reg', 'c.klsrawat AS poli', 
                                 'c.nmdpdjp AS dokter', 'c.jnspelayanan AS status', 'c.no_sep AS sep', 
                                 'c.no_kartu AS noka')
                         ->orderBy('a.no_rawat')
