@@ -23,7 +23,15 @@
             <a href="/berkas" class="nav-link">
               <i class="nav-icon fas fa-th"></i>
               <p>
-                Berkas INACBG
+                Berkas Rawat Jalan
+              </p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="/berkas_rn" class="nav-link">
+              <i class="nav-icon fas fa-th"></i>
+              <p>
+                Berkas Rawat Inap
               </p>
             </a>
           </li>

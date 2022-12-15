@@ -1,6 +1,6 @@
 @extends('layout.template')
 
-@section('title','Berkas INACBG')
+@section('title','Berkas Verifikasi Digital Klaim BPJS')
 
 @section('head')
   <!-- Tell the browser to be responsive to screen width -->
@@ -29,7 +29,7 @@
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
-              <h1 class="modal-title fs-5" id="exampleModalLabel">Berkas Perawatan Digital</h1>
+              <h1 class="modal-title fs-5" id="exampleModalLabel">Berkas Perawatan Digital Rawat Jalan</h1>
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
               <div class="modal-body">
@@ -56,7 +56,7 @@
                   <p id="noka"></p>
                   <p id="diagnosa"></p>
                 </div>
-                <h5>Berkas Perawatan Digital</h5>
+                <h5>Berkas</h5>
                 <div>
                   <p id="berkas"></p>
                 </div>
@@ -71,11 +71,12 @@
         <div class="col-12">
           <div class="card">
             <div class="card-header">
-              <h3 class="card-title">Berkas Verifikasi Digital Klaim BPJS</h3>
+              <h3 class="card-title">Berkas Digital Rawat Jalan</h3>
             </div>
             <!-- /.card-header -->
             <div class="card-body">
-              <div class="row input-daterange">
+              <h5>Tanggal Registrasi</h5>
+              <div class="row input-daterange float-center">
                   <div class="col-md-4">
                       <input type="date" name="from_date" id="from_date" class="form-control" value="{{$now}}" placeholder="Tanggal Awal"/>
                   </div>
@@ -83,8 +84,8 @@
                       <input type="date" name="to_date" id="to_date" class="form-control" value="{{$now}}" placeholder="Tabggal Akhir"/>
                   </div>
                   <div class="col-md-4">
-                      <button type="button" name="filter" id="filter" class="btn btn-primary">Filter</button>
-                      <button type="button" name="refresh" id="refresh" class="btn btn-default">Refresh</button>
+                    <button type="button" name="filter" id="filter" class="btn btn-primary">Filter</button>
+                    <button type="button" name="refresh" id="refresh" class="btn btn-default">Refresh</button>
                   </div>
               </div>
               <br>
@@ -92,7 +93,7 @@
                 <thead>
                   <tr>
                       <th>No</th>
-                      <th>Tgl registrasi</th>
+                      <th>Tanggal registrasi</th>
                       <th>No Rawat</th>
                       <th>No RM</th>
                       <th>Nama Pasien</th>
@@ -184,9 +185,10 @@ $(function () {
     $('#filter').click(function(){
       var from_date = $('#from_date').val();
       var to_date = $('#to_date').val();
+      var status = $('#status').val();
       if(from_date != '' &&  to_date != ''){
         $('#tabel1').DataTable().destroy();
-        isi(from_date, to_date);
+        isi(from_date, to_date, status);
       }else{
         alert('Both Date is required');
       }

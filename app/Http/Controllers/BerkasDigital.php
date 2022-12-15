@@ -26,6 +26,7 @@ class BerkasDigital extends Controller
                                         ->leftjoin('simrs_khanza.bridging_sep as c','a.no_rawat','=','c.no_rawat')
                                         ->leftjoin('simrs_khanza.pasien as d','a.no_rkm_medis','=','d.no_rkm_medis')
                                         ->where('a.kd_pj','=','BPJ')
+                                        ->where('c.jnspelayanan','=','2')
                                         ->whereBetween('a.tgl_registrasi', array($request->from_date, $request->to_date))
                                         ->select('a.no_rawat as no_rawat', 'a.no_rkm_medis AS no_rkm_medis','c.no_kartu AS noka',
                                                 'd.nm_pasien AS nm_pasien','a.tgl_registrasi AS tgl_reg','c.no_sep AS sep'
@@ -38,6 +39,7 @@ class BerkasDigital extends Controller
                                         ->leftjoin('simrs_khanza.bridging_sep as c','a.no_rawat','=','c.no_rawat')
                                         ->leftjoin('simrs_khanza.pasien as d','a.no_rkm_medis','=','d.no_rkm_medis')
                                         ->where('a.kd_pj','=','BPJ')
+                                        ->where('c.jnspelayanan','=','2')
                                         ->where('a.tgl_registrasi','=',$now)
                                         ->select('a.no_rawat as no_rawat', 'a.no_rkm_medis AS no_rkm_medis','c.no_kartu AS noka',
                                                 'd.nm_pasien AS nm_pasien','a.tgl_registrasi AS tgl_reg','c.no_sep AS sep'
@@ -91,3 +93,4 @@ class BerkasDigital extends Controller
         }
 
 }
+
