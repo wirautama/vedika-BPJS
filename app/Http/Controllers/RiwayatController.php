@@ -3,17 +3,15 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Yajra\Datatables\DataTables;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 
-
-class BerkasRawatJalan extends Controller
+class RiwayatController extends Controller
 {
     public function __construct()
-        {
-            $this->middleware('auth');
-        }
+    {
+        $this->middleware('auth');
+    }
 
     public function index(Request $request)
     {
@@ -21,18 +19,14 @@ class BerkasRawatJalan extends Controller
 
             $now=Carbon::now()->toDateString();
 
-            $stts = $request->status_rwt;
-
             if(request()->ajax()){
-                    if(!empty($request->from_date) && !empty($request->status_rwt)){
+                    if(!empty($request->from_date)){
                             $data = DB::table('simrs_khanza.reg_periksa as a')
                                     ->leftjoin('simrs_khanza.bridging_sep as c','a.no_rawat','=','c.no_rawat')
                                     ->leftjoin('simrs_khanza.pasien as d','a.no_rkm_medis','=','d.no_rkm_medis')
                                     ->where('a.kd_pj','=','BPJ')
+                                    ->where('c.jnspelayanan','=','2')
                                     ->whereBetween('a.tgl_registrasi', array($request->from_date, $request->to_date))
-                                    ->when($stts != "0", function ($query) use ($request) {
-                                            $query->where('c.jnspelayanan','=', $request->status_rwt);
-                                        })
                                     ->select('a.no_rawat as no_rawat', 'a.no_rkm_medis AS no_rkm_medis','c.no_kartu AS noka',
                                             'd.nm_pasien AS nm_pasien','a.tgl_registrasi AS tgl_reg','c.no_sep AS sep'
                                             )
@@ -44,6 +38,7 @@ class BerkasRawatJalan extends Controller
                                     ->leftjoin('simrs_khanza.bridging_sep as c','a.no_rawat','=','c.no_rawat')
                                     ->leftjoin('simrs_khanza.pasien as d','a.no_rkm_medis','=','d.no_rkm_medis')
                                     ->where('a.kd_pj','=','BPJ')
+                                    ->where('c.jnspelayanan','=','2')
                                     ->where('a.tgl_registrasi','=',$now)
                                     ->select('a.no_rawat as no_rawat', 'a.no_rkm_medis AS no_rkm_medis','c.no_kartu AS noka',
                                             'd.nm_pasien AS nm_pasien','a.tgl_registrasi AS tgl_reg','c.no_sep AS sep'
@@ -54,17 +49,17 @@ class BerkasRawatJalan extends Controller
                     return datatables()
                             ->of($data)
                             ->addColumn('file', function($data){
-                                    $button = "<button type='button' class='file btn btn-block btn-primary' id='".$data->no_rawat."' data-bs-toggle='modal' data-bs-target='#exampleModal'><i class='fas fa-folder'></button>";
+                                    $button = "<button type='button' class='riwayat btn btn-block btn-primary' id='".$data->no_rawat."'><i class='fas fa-folder'></button>";
                                     return $button;
                             })
                             ->rawColumns(['file'])
                             ->make(true);
             }
-            return view('berkas_jl',compact('now','user'));
+            return view('riwayat',compact('now','user'));
     }
 
 
-    public function file(Request $request){
+    public function detail(Request $request){
 
             $no_rawat = $request->id;
             $kunjungan = DB::table('simrs_khanza.reg_periksa as a')
@@ -80,20 +75,15 @@ class BerkasRawatJalan extends Controller
                     ->orderBy('a.no_rawat')
                     ->first();
 
-            $diagnosa = DB::table('simrs_khanza.diagnosa_pasien as a')   
-                    ->leftJoin('simrs_khanza.penyakit as b', 'a.kd_penyakit', '=', 'b.kd_penyakit')
-                    ->where('a.prioritas','=','1')
+            $rawat_jl_dr = DB::table('simrs_khanza.rawat_jl_dr as a')
+                    ->leftjoin('simrs_khanza.jns_perawatan as b','a.no_rawat','=','b.no_rawat')
+                    ->leftjoin('simrs_khanza.dokter as c','b.kd_dokter','=','c.kd_dokter')
                     ->where('a.no_rawat','=',$no_rawat)
-                    ->first();
-
-            $berkas = DB::table('simrs_khanza.berkas_digital_perawatan as a')
-                    ->leftJoin('simrs_khanza.master_berkas_digital as b','a.kode','=','b.kode')
-                    ->select('a.no_rawat as no_rawat','b.nama as nama','a.lokasi_file as lokasi_file')
-                    ->where('a.no_rawat','=',$no_rawat)
+                    ->select('a.tgl_perawatan as tgl_perawatan', 'a.biaya_rawat as biaya_rawat', 'b.nm_perawatan AS nm_perawatan', 
+                            'c.nm_dokter AS nm_dokter')
                     ->get()
                     ->toArray();
 
-            return response()->json(['kunjungan' => $kunjungan, 'berkas' => $berkas, 'diagnosa' => $diagnosa]);
+            return response()->json(['kunjungan' => $kunjungan, 'rawat_jl_dr' => $rawat_jl_dr]);
     }
-
 }

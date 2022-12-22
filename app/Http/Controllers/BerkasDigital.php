@@ -89,7 +89,16 @@ class BerkasDigital extends Controller
                         ->get()
                         ->toArray();
 
-                return response()->json(['kunjungan' => $kunjungan, 'berkas' => $berkas, 'diagnosa' => $diagnosa]);
+                $rawat_jl_dr = DB::table('simrs_khanza.rawat_jl_dr as a')
+                        ->leftjoin('simrs_khanza.jns_perawatan as b','a.no_rawat','=','b.no_rawat')
+                        ->leftjoin('simrs_khanza.dokter as c','b.kd_dokter','=','c.kd_dokter')
+                        ->where('a.no_rawat','=',$no_rawat)
+                        ->select('a.tgl_perawatan as tgl_perawatan', 'a.biaya_rawat as biaya_rawat', 'b.nm_perawatan AS nm_perawatan', 
+                                'c.nm_dokter AS nm_dokter')
+                        ->get()
+                        ->toArray();
+
+                return response()->json(['kunjungan' => $kunjungan, 'berkas' => $berkas, 'diagnosa' => $diagnosa, 'rawat_jl_dr' => $rawat_jl_dr]);
         }
 
 }

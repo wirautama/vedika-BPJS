@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Support\Facades\Validator;
 
 class LoginController extends Controller
 {
@@ -27,12 +28,26 @@ class LoginController extends Controller
      * @var string
      */
     protected $redirectTo = RouteServiceProvider::HOME;
-
     /**
      * Create a new controller instance.
      *
      * @return void
      */
+    
+     protected function validator(array $data)
+     {
+         return Validator::make($data, [
+             'email' => ['required'],
+             'password' => ['required'],
+             'captcha' => ['required','captcha'],
+         ]);
+     }
+ 
+     public function reloadCaptcha()
+     {
+         return response()->json(['captcha'=> captcha_img()]);
+     }
+
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
