@@ -12,8 +12,4 @@ class kelurahan extends Model
 
     protected $table = 'kelurahan';
 
-    protected $fillable = [
-        'kd_kel',
-        'nm_kel',
-    ];
 }

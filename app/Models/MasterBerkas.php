@@ -11,9 +11,5 @@ class MasterBerkas extends Model
     protected $connection = 'khanza';
 
     protected $table = 'master_berkas_digital';
-    
-    protected $fillable = [
-        'kode',
-        'nama',
-    ];
+
 }

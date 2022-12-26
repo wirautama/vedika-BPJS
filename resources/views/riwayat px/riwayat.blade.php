@@ -1,4 +1,4 @@
-@extends('layout.template')
+@extends('layouts.template')
 
 @section('title','Berkas Verifikasi Digital Klaim BPJS')
 
@@ -25,30 +25,17 @@
 @endsection
 
 @section('content')
-      <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-          <div class="modal-content">
+        <div class="modal fade bd-example-modal-lg" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-lg">
+            <div class="modal-content">
             <div class="modal-header">
-              <h1 class="modal-title fs-5" id="exampleModalLabel">Berkas Perawatan Digital Rawat Jalan</h1>
+              <h1 class="modal-title fs-5" id="exampleModalLabel">Riwayat Perawatan Rawat Jalan</h1>
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
               <div class="modal-body">
-                <h5>Data Pasien</h5>
-                <div>
-                  <p></p>
-                  <p id="no_rawat"></p>
-                  <p id="sep"></p>
-                  <p id="tgl_reg"></p>
-                  <p id="poli"></p>
-                  <p id="no_rkm_medis"></p>
-                  <p id="nm_pasien"></p>
-                  <p id="alamat"></p>
-                  <p id="status"></p>
-                </div>
                 <h5>Tindakan Rawat Jalan Dokter</h5>
                   <div class="modal-body">
-                    <table id="example1" class="table table-bordered table-striped">
-                      <thead>
+                    <table id="dr_table" class="table table-bordered table-striped">
                       <tr>
                         <th>No.</th>
                         <th>Tanggal</th>
@@ -58,19 +45,21 @@
                       </tr>
                       </thead>
                       <tbody>
-                        <?php $no=1 ?>
-                            <tr>
-                              <td font-size: 10px;>{{$no++}}</td>
-                              <td>
-                                <p id="tgl_perawatan"></p>
-                              </td>
-                              <td>
-                                <p>coba</p>
-                              </td>
-                              {{-- <td> {{$rawat_jl_dr->nm_tindakan}} </td>
-                              <td> {{$rawat_jl_dr->nm_dokter}} </td>
-                              <td> {{$rawat_jl_dr->biaya_rawat}} </td> --}}
-                            </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  <h5>Tindakan Rawat Jalan Perawat</h5>
+                  <div class="modal-body">
+                    <table id="pr_table" class="table table-bordered table-striped">
+                      <tr>
+                        <th>No.</th>
+                        <th>Tanggal</th>
+                        <th>Nama Tindakan/Perawatan</th>
+                        <th>Dokter</th>
+                        <th>Biaya</th>
+                      </tr>
+                      </thead>
+                      <tbody>
                       </tbody>
                     </table>
                   </div>
@@ -103,6 +92,16 @@
                   </div>
               </div>
               <br>
+              {{-- <select name='status' class='riwayat custom-select'>
+                <option id='2022/12/12/000011' value='0'>PILIH RIWAYAT</option>
+                <option id='2022/12/12/000011' value='1'>RAWAT JALAN</option>
+                <option id='2022/12/12/000011' value='2'>RAWAT INAP</option>
+                <option id='2022/12/12/000011' value='3'>OPERASI</option>
+                <option id='2022/12/12/000011' value='4'>LABORATORIUM</option>
+                <option id='2022/12/12/000011' value='5'>RADIOLOGI</option>
+              </select>
+              <br>
+              <br> --}}
               <table id="tabel1" class="table table-bordered table-striped">
                 <thead>
                   <tr>
@@ -137,7 +136,6 @@
 <!-- page script -->
 
 <!-- script datatables dan JQuery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.js"></script>
 
 <script>
@@ -166,7 +164,7 @@ $(function () {
         todayBtn:'linked',
         format:'yyyy-mm-dd',
         autoclose:true
-      });        
+      });
     })
 
     function isi(from_date = '', to_date = '') {
@@ -175,7 +173,7 @@ $(function () {
             responsive: true,
             processing: true,
             ajax: {
-                url: "{{route('berkas')}}",
+                url: "{{route('riwayat')}}",
                 data:{from_date:from_date, to_date:to_date}
             },
             columns: [
@@ -202,7 +200,7 @@ $(function () {
       var status = $('#status').val();
       if(from_date != '' &&  to_date != ''){
         $('#tabel1').DataTable().destroy();
-        isi(from_date, to_date, status);
+        isi(from_date, to_date);
       }else{
         alert('Both Date is required');
       }
@@ -215,33 +213,145 @@ $(function () {
       isi();
     });
 
-    $(document).on('click','.riwayat',function(){
-      let id = $(this).attr('id')
-      $.ajax({
-        url: "{{route('detail')}}",
-        type: 'post',
-        data: {
-          id: id,
-          _token: "{{csrf_token()}}"
-        },
-        success: function (res) {
-          $('#no_rawat').html    ('No Rawat           : ' + res.kunjungan.no_rawat)
-          $('#sep').html         ('No SEP             : ' + res.kunjungan.sep)
-          $('#tgl_reg').html     ('Tgl Registrasi     : ' + res.kunjungan.tgl_reg)
-          $('#poli').html        ('Poliklinik         : ' + res.kunjungan.poli)
-          $('#dokter').html      ('Dokter             : ' + res.kunjungan.dokter)
-          $('#no_rkm_medis').html('No RM              : ' + res.kunjungan.no_rkm_medis)
-          $('#nm_pasien').html   ('Nama Pasien        : ' + res.kunjungan.nm_pasien)
-          $('#alamat').html      ('Alamat             : ' + res.kunjungan.alamat)
-          
-          let elemen = '';
+    // $(document).on('click','.riwayat',function(){
+    //   let id = $(this).attr('id')
+    //   $.ajax({
+    //     url: "{{route('jalan')}}",
+    //     type: 'post',
+    //     data: {
+    //       id: id,
+    //       _token: "{{csrf_token()}}"
+    //     },
+    //     success: function (res) {
+    //       $('#no_rawat').html    ('No Rawat           : ' + res.kunjungan.no_rawat)
+    //       $('#sep').html         ('No SEP             : ' + res.kunjungan.sep)
+    //       $('#tgl_reg').html     ('Tgl Registrasi     : ' + res.kunjungan.tgl_reg)
+    //       $('#poli').html        ('Poliklinik         : ' + res.kunjungan.poli)
+    //       $('#dokter').html      ('Dokter             : ' + res.kunjungan.dokter)
+    //       $('#no_rkm_medis').html('No RM              : ' + res.kunjungan.no_rkm_medis)
+    //       $('#nm_pasien').html   ('Nama Pasien        : ' + res.kunjungan.nm_pasien)
+    //       $('#alamat').html      ('Alamat             : ' + res.kunjungan.alamat)
 
-          for(let i=0; i<rawat_jl_dr.length; i++){
-              elemen += '<p> '+ res.rawat_jl_dr[i].tgl_perawatan +' </p>'
+    //       let rawat_jl = res.rawat_jl_dr;
+    //       let no = 1;
+
+    //       $.each(rawat_jl, function (i, item) {
+    //           $('<tr>').append(
+    //           $('<td>').text(no),
+    //           $('<td>').text(item.tgl_perawatan),
+    //           $('<td>').text(item.nm_perawatan),
+    //           $('<td>').text(item.nm_dokter),
+    //           $('<td>').text(item.biaya_rawat)
+    //           ).appendTo('#records_table');
+
+    //           no++;
+    //       });
+    //     }
+    //   })
+    // })
+
+    change = function () {
+      $('#tabel1 tbody tr td select').change(function () {
+        var optionSelected = $(this).find("option:selected");
+        var valueSelected = optionSelected.val();
+        var textSelected = optionSelected.text();
+        let id = optionSelected.attr('data');
+      if(valueSelected == 1){
+        $('#exampleModal').modal('show');
+        $.ajax({
+          url: "{{route('jalan')}}",
+          type: 'post',
+          data: {
+            id: id,
+            _token: "{{csrf_token()}}"
+          },
+          success: function (res) {
+
+            let rawat_jl_dr = res.rawat_jl_dr;
+            let rawat_jl_pr = res.rawat_jl_pr;
+            let no_dr = 1;
+            let no_pr = 1;
+
+            //Tabel rawat jalan dokter
+            $.each(rawat_jl_dr, function (i, item) {
+                $('<tr>').append(
+                $('<td>').text(no_dr),
+                $('<td>').text(item.tgl_perawatan),
+                $('<td>').text(item.nm_perawatan),
+                $('<td>').text(item.nm_dokter),
+                $('<td>').text(item.biaya_rawat)
+                ).appendTo('#dr_table');
+
+                no_dr++;
+            });
+
+            //Tabel rawat jalan perawat
+            $.each(rawat_jl_pr, function (i, item) {
+                $('<tr>').append(
+                $('<td>').text(no_pr),
+                $('<td>').text(item.tgl_perawatan),
+                $('<td>').text(item.nm_perawatan),
+                $('<td>').text(item.nm_perawat),
+                $('<td>').text(item.biaya_rawat)
+                ).appendTo('#pr_table');
+
+                no_pr++;
+            });
+          }
+        })
+      }
+      else if (valueSelected == 2){
+        $('#exampleModal').modal('show');
+        $("#modal-title").text("RAWAT INAP");
+        $.ajax({
+          url: "{{route('inap')}}",
+          type: 'post',
+          data: {
+            id: id,
+            _token: "{{csrf_token()}}"
+          },
+          success: function (res) {
+
+            let rawat_inap_dr = res.rawat_inap_dr;
+            let rawat_inap_pr = res.rawat_inap_pr;
+            let no_dr = 1;
+            let no_pr = 1;
+
+            if(rawat_inap_dr > 0 && rawat_inap_pr > 0) {
+              //Tabel rawat jalan dokter
+              $.each(rawat_inap_dr, function (i, item) {
+                  $('<tr>').append(
+                  $('<td>').text(no_dr),
+                  $('<td>').text(item.tgl_perawatan),
+                  $('<td>').text(item.nm_perawatan),
+                  $('<td>').text(item.nm_dokter),
+                  $('<td>').text(item.biaya_rawat)
+                  ).appendTo('#dr_table');
+
+                  no_dr++;
+              });
+
+              //Tabel rawat jalan perawat
+              $.each(rawat_inap_pr, function (i, item) {
+                  $('<tr>').append(
+                  $('<td>').text(no_pr),
+                  $('<td>').text(item.tgl_perawatan),
+                  $('<td>').text(item.nm_perawatan),
+                  $('<td>').text(item.nm_perawat),
+                  $('<td>').text(item.biaya_rawat)
+                  ).appendTo('#pr_table');
+
+                  no_pr++;
+              });
             }
-            $('#tgl_perawatan').html(elemen)
-        }
-      })
-    })
+            else {
+              alert("Data Kosong");
+            }
+          }
+        })
+      }
+    });
+  }
+
 </script>
 @endsection

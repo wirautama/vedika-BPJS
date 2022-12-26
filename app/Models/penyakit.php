@@ -11,8 +11,4 @@ class penyakit extends Model
 
     protected $table = 'penyakit';
 
-    protected $fillable = [
-        'kd_penyakit',
-        'nm_penyakit',
-    ];
 }

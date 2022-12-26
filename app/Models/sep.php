@@ -11,13 +11,4 @@ class sep extends Model
     
     protected $table = 'bridging_sep';
 
-    protected $fillable = [
-        'no_sep',
-        'no_rawat',
-        'jnspelayanan',
-        'nmpolitujuan',
-        'nmdpjplayanan',
-        'no_kartu',
-        'tgl_sep'
-    ];
 }

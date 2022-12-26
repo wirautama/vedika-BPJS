@@ -58,7 +58,7 @@ class BerkasDigitalRanap extends Controller
                                 ->rawColumns(['file'])
                                 ->make(true);
                 }
-                return view('berkas_ranap',compact('now','user'));
+                return view('berkas ranap.berkas_ranap',compact('now','user'));
         }
 
 

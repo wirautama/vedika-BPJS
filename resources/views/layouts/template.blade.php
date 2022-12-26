@@ -62,7 +62,7 @@
   <!-- /.navbar -->
 
   <!-- Main Sidebar Container -->
-  @include('layout.sidebar')
+  @include('layouts.sidebar')
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->

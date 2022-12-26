@@ -11,9 +11,4 @@ class kabupaten extends Model
     protected $connection = 'khanza';
 
     protected $table = 'kabupaten';
-
-    protected $fillable = [
-        'kd_kab',
-        'nm_kab',
-    ];
 }

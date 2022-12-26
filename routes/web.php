@@ -37,7 +37,8 @@ Route::post('/select_rn', [BerkasDigitalRanap::class, 'getDate']);
 //MENU RIWAYAT PERAWATAN
 Route::get('/riwayat', [RiwayatController::class, 'index']);
 Route::get('riwayat.index', [RiwayatController::class, 'index'])->name('riwayat');
-Route::post('riwayat.detail', [RiwayatController::class, 'detail'])->name('detail');
+Route::post('riwayat.jalan', [RiwayatController::class, 'jalan'])->name('jalan');
+Route::post('riwayat.inap', [RiwayatController::class, 'inap'])->name('inap');
 Route::post('/riwayat', [RiwayatController::class, 'getDate']);
 
 Auth::routes();

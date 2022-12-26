@@ -11,13 +11,4 @@ class diagnosa extends Model
     protected $connection = 'khanza';    
     
     protected $table = 'diagnosa_pasien';
-
-    protected $fillable = [
-        'no_rawat',
-        'kd_penyakit',
-        'status',
-        'prioritas',
-        'status_penyakit',
-
-    ];
 }

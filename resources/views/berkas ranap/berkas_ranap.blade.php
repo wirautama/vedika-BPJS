@@ -1,4 +1,4 @@
-@extends('layout.template')
+@extends('layouts.template')
 
 @section('title','Berkas Verifikasi Digital Klaim BPJS')
 
@@ -29,7 +29,7 @@
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
-              <h1 class="modal-title fs-5" id="exampleModalLabel">Berkas Perawatan Digital Rawat Jalan</h1>
+              <h1 class="modal-title fs-5" id="exampleModalLabel">Berkas Perawatan Digital Rawat Inap</h1>
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
               <div class="modal-body">
@@ -56,7 +56,7 @@
                   <p id="noka"></p>
                   <p id="diagnosa"></p>
                 </div>
-                <h5>Berkas</h5>
+                <h5>Berkas Perawatan Digital</h5>
                 <div>
                   <p id="berkas"></p>
                 </div>
@@ -71,11 +71,11 @@
         <div class="col-12">
           <div class="card">
             <div class="card-header">
-              <h3 class="card-title">Berkas Digital Rawat Jalan</h3>
+              <h3 class="card-title">Berkas Digital Rawat Inap</h3>
             </div>
             <!-- /.card-header -->
             <div class="card-body">
-              <h5>Tanggal Registrasi</h5>
+              <h5>Tanggal KRS</h5>
               <div class="row input-daterange float-center">
                   <div class="col-md-4">
                       <input type="date" name="from_date" id="from_date" class="form-control" value="{{$now}}" placeholder="Tanggal Awal"/>
@@ -93,7 +93,7 @@
                 <thead>
                   <tr>
                       <th>No</th>
-                      <th>Tanggal registrasi</th>
+                      <th>Tanggal KRS</th>
                       <th>No Rawat</th>
                       <th>No RM</th>
                       <th>Nama Pasien</th>
@@ -161,7 +161,7 @@ $(function () {
             responsive: true,
             processing: true,
             ajax: {
-                url: "{{route('berkas')}}",
+                url: "{{route('berkas_rn')}}",
                 data:{from_date:from_date, to_date:to_date}
             },
             columns: [
@@ -185,10 +185,9 @@ $(function () {
     $('#filter').click(function(){
       var from_date = $('#from_date').val();
       var to_date = $('#to_date').val();
-      var status = $('#status').val();
       if(from_date != '' &&  to_date != ''){
         $('#tabel1').DataTable().destroy();
-        isi(from_date, to_date, status);
+        isi(from_date, to_date);
       }else{
         alert('Both Date is required');
       }
@@ -204,7 +203,7 @@ $(function () {
     $(document).on('click','.file',function(){
       let id = $(this).attr('id')
       $.ajax({
-        url: "{{route('files')}}",
+        url: "{{route('files_rn')}}",
         type: 'post',
         data: {
           id: id,
@@ -223,7 +222,7 @@ $(function () {
           $('#alamat').html      ('Alamat          : ' + res.kunjungan.alamat)
 
           $('#tgl_reg').html     ('Tgl Registrasi     : ' + res.kunjungan.tgl_reg)
-          $('#poli').html        ('Poliklinik         : ' + res.kunjungan.poli)
+          $('#poli').html        ('Kelas Rawat        : Kelas ' + res.kunjungan.poli)
           $('#dokter').html      ('Dokter             : ' + res.kunjungan.dokter)
           $('#status').html      ('Status             : ' + $status)
 

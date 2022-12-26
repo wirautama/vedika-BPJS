@@ -12,11 +12,5 @@ class BerkasDigitalPerawatan extends Model
     protected $connection = 'khanza';
 
     protected $table = 'berkas_digital_perawatan';
-    
-    protected $fillabel = [
-        'no_rawat',
-        'kode',
-        'lokasi_file',
-    ];
 
 }
