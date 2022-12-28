@@ -191,8 +191,7 @@ class RiwayatController extends Controller
                 ->select('a.lokasi_file as lokasi_file')
                 ->where('a.no_rawat','=',$no_rawat)
                 ->where('a.kode','=','015')
-                ->get()
-                ->toArray();
+                ->first();
 
         return response()->json([
                                   'sep' => $sep,

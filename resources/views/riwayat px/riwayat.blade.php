@@ -236,8 +236,7 @@ $(function () {
           $('#peserta').html      ('Peserta             : ' + res.sep.peserta)
           $('#jenis').html      ('Jns. Rawat             : Rawat Jalan')
           
-          
-          let url = "{{ URL::asset('/template/berkas') }}/"+ res.resume.lokasi_file +"";
+          let url = "{{ URL::asset('/template/berkas') }}/pages/upload/0195R0401022V000004_resume.pdf";
           $('iframe').attr('src', url)  
 
           let rawat_jl_dr = res.rawat_jl_dr;
