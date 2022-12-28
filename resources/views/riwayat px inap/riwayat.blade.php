@@ -205,6 +205,7 @@ $(function () {
       $('#resume').hide();
       $('#rwt_inap').hide();
       $('#kamar').hide();
+      $('#radiologi').hide();
       $('#obat').hide();
 
       let totalIDR = new Intl.NumberFormat('id-ID', {
@@ -237,8 +238,8 @@ $(function () {
           $('#peserta').html      ('Peserta             : ' + res.sep.peserta)
           $('#jenis').html      ('Jns. Rawat             : Rawat Inap')
 
-          let url = "{{ URL::asset('/template/berkas') }}/pages/upload/0195R0401022V000004_resume.pdf";
-          $('iframe').attr('src', url)  
+          let url = "{{ URL::asset('/template/berkas') }}/"+ res.resume.lokasi_file +"";
+          $('iframe').attr('src', url)
 
           let rawat_inap_dr = res.rawat_inap_dr;
           let rawat_inap_pr = res.rawat_inap_pr;
@@ -291,6 +292,19 @@ $(function () {
               no_kamar++;
           });
 
+          //Tabel rawat radiologi
+          $.each(radiologi, function (i, item) {
+              $('<tr>').append(
+              $('<td>').text(no_rad),
+              $('<td>').text(item.tgl_periksa + " " + item.jam),
+              $('<td>').text(item.nm_perawatan),
+              $('<td>').text(item.nm_dokter),
+              $('<td>').text(totalIDR.format(item.biaya))
+              ).appendTo('#radio_table');
+
+              no_rad++;
+          });
+
           //Tabel obat
           $.each(obat, function (i, item) {
               $('<tr>').append(
@@ -312,6 +326,7 @@ $(function () {
       $('#pr_in_table tbody').empty();
       $('#kamar_inap tbody').empty();
       $('#obat_table tbody').empty();
+      $('#radio_table tbody').empty();
     })
 
     $('#ubah').on('click', function() {
@@ -323,6 +338,7 @@ $(function () {
         $('#rwt_inap').hide();
         $('#kamar').hide();
         $('#obat').hide();
+        $('#radiologi').hide();
       }
       else if (dom == 'resume') {
         $('#data_sep').hide();
@@ -330,6 +346,7 @@ $(function () {
         $('#rwt_inap').hide();
         $('#kamar').hide();
         $('#obat').hide();
+        $('#radiologi').hide();
       } 
       else if (dom == 'rwt_jalan') {
         $('#data_sep').hide();
@@ -337,6 +354,7 @@ $(function () {
         $('#rwt_inap').hide();
         $('#kamar').hide();
         $('#obat').hide();
+        $('#radiologi').hide();
       } 
       else if (dom == 'rwt_inap') {
         $('#data_sep').hide();
@@ -344,6 +362,7 @@ $(function () {
         $('#rwt_inap').show();
         $('#kamar').hide();
         $('#obat').hide();
+        $('#radiologi').hide();
       }
       else if (dom == 'kamar') {
         $('#data_sep').hide();
@@ -351,6 +370,7 @@ $(function () {
         $('#rwt_inap').hide();
         $('#kamar').show();
         $('#obat').hide();
+        $('#radiologi').hide();
       }
       else if (dom == 'obat') {
         $('#data_sep').hide();
@@ -358,6 +378,15 @@ $(function () {
         $('#rwt_inap').hide();
         $('#kamar').hide();
         $('#obat').show();
+        $('#radiologi').hide();
+      }
+      else if (dom == 'radiologi') {
+        $('#data_sep').hide();
+        $('#resume').hide();
+        $('#rwt_inap').hide();
+        $('#kamar').hide();
+        $('#obat').hide();
+        $('#radiologi').show();
       }
     })
 

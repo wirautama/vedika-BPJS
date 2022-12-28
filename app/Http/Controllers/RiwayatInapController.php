@@ -82,8 +82,13 @@ class RiwayatInapController extends Controller
                 ->join('simrs_khanza.detail_pemberian_obat as b','a.no_rawat','=','b.no_rawat')
                 ->where('a.tgl_registrasi','=',$now)
                 ->sum('b.total');
+        $jumlah_rad = DB::table('simrs_khanza.reg_periksa as a')
+                ->join('simrs_khanza.periksa_radiologi as b', 'a.no_rawat','=','b.no_rawat')
+                ->where('a.tgl_registrasi','=',$now)
+                ->sum('b.biaya');
         
-        $total = $jumlah_jl_dr + $jumlah_jl_pr + $jumlah_inap_dr + $jumlah_inap_pr + $jumlah_kamar + $jumlah_obat;
+        $total = $jumlah_jl_dr + $jumlah_jl_pr + $jumlah_inap_dr + $jumlah_inap_pr + $jumlah_kamar + 
+                 $jumlah_obat + $jumlah_rad;
 
         return view('riwayat px inap.riwayat',compact('now','user','total'));
     }
@@ -115,8 +120,13 @@ class RiwayatInapController extends Controller
                 ->join('simrs_khanza.detail_pemberian_obat as b','a.no_rawat','=','b.no_rawat')
                 ->whereBetween('a.tgl_registrasi', array($request->from_date, $request->to_date))
                 ->sum('b.total');
-
-        $total = $jumlah_jl_dr + $jumlah_jl_pr + $jumlah_inap_dr + $jumlah_inap_pr + $jumlah_kamar + $jumlah_obat;
+        $jumlah_rad = DB::table('simrs_khanza.reg_periksa as a')
+                ->join('simrs_khanza.periksa_radiologi as b', 'a.no_rawat','=','b.no_rawat')
+                ->whereBetween('a.tgl_registrasi', array($request->from_date, $request->to_date))
+                ->sum('b.biaya');
+        
+        $total = $jumlah_jl_dr + $jumlah_jl_pr + $jumlah_inap_dr + $jumlah_inap_pr + $jumlah_kamar + 
+                 $jumlah_obat + $jumlah_rad;
 
         return response()->json(['total' => $total]);
     }
@@ -135,23 +145,6 @@ class RiwayatInapController extends Controller
                          'b.catatan as catatan','b.peserta as peserta','b.jnspelayanan as jnspelayanan')
                 ->orderBy('b.jnspelayanan','DESC')
                 ->first();
-
-        $rawat_jl_dr = DB::table('simrs_khanza.rawat_jl_dr as a')
-                ->join('simrs_khanza.jns_perawatan as b','a.kd_jenis_prw','=','b.kd_jenis_prw')
-                ->join('simrs_khanza.dokter as c','a.kd_dokter','=','c.kd_dokter')
-                ->where('a.no_rawat','=',$no_rawat)
-                ->select('a.tgl_perawatan as tgl_perawatan', 'a.biaya_rawat as biaya_rawat', 'b.nm_perawatan AS nm_perawatan', 
-                        'c.nm_dokter AS nm_dokter')
-                ->get()
-                ->toArray();
-
-        $rawat_jl_pr = DB::table('simrs_khanza.rawat_jl_pr as a')
-                ->join('simrs_khanza.jns_perawatan as b','a.kd_jenis_prw','=','b.kd_jenis_prw')
-                ->join('simrs_khanza.petugas as c', 'a.nip', '=', 'c.nip')
-                ->where('a.no_rawat','=',$no_rawat)
-                ->select('a.tgl_perawatan as tgl_perawatan', 'a.biaya_rawat as biaya_rawat', 'b.nm_perawatan AS nm_perawatan', 'c.nama as nm_perawat')
-                ->get()
-                ->toArray();
 
         $rawat_inap_dr = DB::table('simrs_khanza.rawat_inap_dr as a')
                 ->join('simrs_khanza.jns_perawatan_inap as b','a.kd_jenis_prw','=','b.kd_jenis_prw')
@@ -194,16 +187,29 @@ class RiwayatInapController extends Controller
                 ->where('a.no_rawat','=',$no_rawat)
                 ->where('a.kode','=','015')
                 ->first();
+        
+        if($resume == null){
+                $resume = array (
+                        array('lokasi_file','-')
+                );
+        }
+
+        $radiologi = DB::table('simrs_khanza.periksa_radiologi as a')
+                ->join('simrs_khanza.jns_perawatan_radiologi as b','a.kd_jenis_prw','=','b.kd_jenis_prw')
+                ->join('simrs_khanza.dokter as c', 'a.kd_dokter','=','c.kd_dokter')
+                ->where('a.no_rawat','=',$no_rawat)
+                ->select('a.tgl_periksa', 'a.jam', 'b.nm_perawatan','c.nm_dokter','a.biaya')
+                ->get()
+                ->toArray();
 
         return response()->json([
-                                  'sep' => $sep,
-                                  'rawat_jl_dr' => $rawat_jl_dr, 
-                                  'rawat_jl_pr' => $rawat_jl_pr, 
-                                  'rawat_inap_dr' => $rawat_inap_dr, 
-                                  'rawat_inap_pr' => $rawat_inap_pr,
-                                  'kamar' => $kamar,
-                                  'obat' => $obat,
-                                  'resume' => $resume,
-                                ]);
+                'sep' => $sep,
+                'rawat_inap_dr' => $rawat_inap_dr, 
+                'rawat_inap_pr' => $rawat_inap_pr,
+                'kamar' => $kamar,
+                'obat' => $obat,
+                'resume' => $resume,
+                'radiologi' => $radiologi,
+        ]);
     }
 }

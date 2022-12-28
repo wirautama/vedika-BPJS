@@ -7,7 +7,7 @@
             <option value='resume'>RESUME MEDIS</option>
             <option value='rwt_jalan'>RAWAT JALAN</option>
             <option value='4'>LABORATORIUM</option>
-            <option value='5'>RADIOLOGI</option>
+            <option value='radiologi'>RADIOLOGI</option>
             <option value='obat'>OBAT</option>
           </select>
         </div>
@@ -77,6 +77,24 @@
         </tbody>
       </table>
     </div>
+  </div>
+  <div id='radiologi'>
+    <h5>Pemeriksaan Radiologi</h5>
+    <div class="modal-body">
+        <table id="radio_table" class="table table-bordered table-striped">
+          <thead>
+          <tr>
+            <th>No.</th>
+            <th>Tanggal</th>
+            <th>Nama Pemeriksaan</th>
+            <th>Dokter</th>
+            <th>Biaya</th>
+          </tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
+      </div>
   </div>
   <div id='obat'>
     <h5>Pemberian Obat/BHP/Alkes</h5>

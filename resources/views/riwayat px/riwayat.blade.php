@@ -204,6 +204,7 @@ $(function () {
       $('#data_sep').hide();
       $('#resume').hide();
       $('#rwt_jalan').hide();
+      $('#radiologi').hide();
       $('#obat').hide();
 
       let totalIDR = new Intl.NumberFormat('id-ID', {
@@ -236,16 +237,18 @@ $(function () {
           $('#peserta').html      ('Peserta             : ' + res.sep.peserta)
           $('#jenis').html      ('Jns. Rawat             : Rawat Jalan')
           
-          let url = "{{ URL::asset('/template/berkas') }}/pages/upload/0195R0401022V000004_resume.pdf";
+          let url = "{{ URL::asset('/template/berkas') }}/"+ res.resume.lokasi_file +"";
           $('iframe').attr('src', url)  
 
           let rawat_jl_dr = res.rawat_jl_dr;
           let rawat_jl_pr = res.rawat_jl_pr;
           let obat = res.obat;
+          let radiologi = res.radiologi;
 
           let no_dr_jl = 1;
           let no_pr_jl = 1;
           let no_obat = 1;
+          let no_rad = 1;
 
           //Tabel rawat jalan dokter
             $.each(rawat_jl_dr, function (i, item) {
@@ -273,6 +276,19 @@ $(function () {
                 no_pr_jl++;
             });
 
+              //Tabel rawat radiologi
+              $.each(radiologi, function (i, item) {
+                $('<tr>').append(
+                $('<td>').text(no_rad),
+                $('<td>').text(item.tgl_periksa + " " + item.jam),
+                $('<td>').text(item.nm_perawatan),
+                $('<td>').text(item.nm_dokter),
+                $('<td>').text(totalIDR.format(item.biaya))
+                ).appendTo('#radio_table');
+
+                no_rad++;
+            });
+
           //Tabel obat
           $.each(obat, function (i, item) {
               $('<tr>').append(
@@ -293,6 +309,7 @@ $(function () {
       $('#dr_jl_table tbody').empty();
       $('#pr_jl_table tbody').empty();
       $('#obat_table tbody').empty();
+      $('#radio_table tbody').empty();
     })
 
     $('#ubah').on('click', function() {
@@ -303,24 +320,35 @@ $(function () {
         $('#resume').hide();
         $('#rwt_jalan').hide();
         $('#obat').hide();
+        $('#radiologi').hide();
       }
       else if (dom == 'resume') {
         $('#data_sep').hide();
         $('#resume').show();
         $('#rwt_jalan').hide();
         $('#obat').hide();
+        $('#radiologi').hide();
       } 
       else if (dom == 'rwt_jalan') {
         $('#data_sep').hide();
         $('#resume').hide();
         $('#rwt_jalan').show();
         $('#obat').hide();
+        $('#radiologi').hide();
       }
       else if (dom == 'obat') {
         $('#data_sep').hide();
         $('#resume').hide();
         $('#rwt_jalan').hide();
         $('#obat').show();
+        $('#radiologi').hide();
+      }
+      else if (dom == 'radiologi') {
+        $('#data_sep').hide();
+        $('#resume').hide();
+        $('#rwt_jalan').hide();
+        $('#obat').hide();
+        $('#radiologi').show();
       }
     })
 
