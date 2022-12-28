@@ -23,7 +23,7 @@
             <a href="/berkas" class="nav-link">
               <i class="nav-icon fas fa-th"></i>
               <p>
-                Berkas Rawat Jalan
+                Berkas Rawat Jalan V1
               </p>
             </a>
           </li>
@@ -31,7 +31,7 @@
             <a href="/berkas_rn" class="nav-link">
               <i class="nav-icon fas fa-th"></i>
               <p>
-                Berkas Rawat Inap
+                Berkas Rawat Inap V1
               </p>
             </a>
           </li>
@@ -39,7 +39,15 @@
             <a href="/riwayat" class="nav-link">
               <i class="nav-icon fas fa-th"></i>
               <p>
-                Riwayat Perawatan
+                Berkas Rawat Jalan V2
+              </p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="/riwayat_rn" class="nav-link">
+              <i class="nav-icon fas fa-th"></i>
+              <p>
+                Berkas Rawat Inap V2
               </p>
             </a>
           </li>

@@ -33,36 +33,7 @@
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
               <div class="modal-body">
-                <h5>Tindakan Rawat Jalan Dokter</h5>
-                  <div class="modal-body">
-                    <table id="dr_table" class="table table-bordered table-striped">
-                      <tr>
-                        <th>No.</th>
-                        <th>Tanggal</th>
-                        <th>Nama Tindakan/Perawatan</th>
-                        <th>Dokter</th>
-                        <th>Biaya</th>
-                      </tr>
-                      </thead>
-                      <tbody>
-                      </tbody>
-                    </table>
-                  </div>
-                  <h5>Tindakan Rawat Jalan Perawat</h5>
-                  <div class="modal-body">
-                    <table id="pr_table" class="table table-bordered table-striped">
-                      <tr>
-                        <th>No.</th>
-                        <th>Tanggal</th>
-                        <th>Nama Tindakan/Perawatan</th>
-                        <th>Dokter</th>
-                        <th>Biaya</th>
-                      </tr>
-                      </thead>
-                      <tbody>
-                      </tbody>
-                    </table>
-                  </div>
+                @include('riwayat px.modal')
               </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -74,7 +45,15 @@
         <div class="col-12">
           <div class="card">
             <div class="card-header">
-              <h3 class="card-title">Berkas Digital Rawat Jalan</h3>
+              {{-- Total Pengajuan --}}
+              @php
+                function rupiah($angka){
+                    $hasil_rupiah = "Rp " . number_format($angka,2,',','.');
+                    return $hasil_rupiah;
+                } 
+              @endphp
+
+              <h3 class="card-title" id = "total">Pengajuan = {{ rupiah($total) }}</h3>
             </div>
             <!-- /.card-header -->
             <div class="card-body">
@@ -92,16 +71,6 @@
                   </div>
               </div>
               <br>
-              {{-- <select name='status' class='riwayat custom-select'>
-                <option id='2022/12/12/000011' value='0'>PILIH RIWAYAT</option>
-                <option id='2022/12/12/000011' value='1'>RAWAT JALAN</option>
-                <option id='2022/12/12/000011' value='2'>RAWAT INAP</option>
-                <option id='2022/12/12/000011' value='3'>OPERASI</option>
-                <option id='2022/12/12/000011' value='4'>LABORATORIUM</option>
-                <option id='2022/12/12/000011' value='5'>RADIOLOGI</option>
-              </select>
-              <br>
-              <br> --}}
               <table id="tabel1" class="table table-bordered table-striped">
                 <thead>
                   <tr>
@@ -204,6 +173,24 @@ $(function () {
       }else{
         alert('Both Date is required');
       }
+      $.ajax({
+        url: "{{route('total')}}",
+        type: 'post',
+        data: {
+          from_date : from_date,
+          to_date : to_date,
+          _token: "{{csrf_token()}}"
+        },
+        success: function (res) {
+
+          let totalIDR = new Intl.NumberFormat('id-ID', {
+              style: 'currency',
+              currency: 'IDR',
+          });
+
+          $('#total').text('Pengajuan = ' + totalIDR.format(res.total));
+        }
+      })
     });
 
     $('#refresh').click(function(){
@@ -213,145 +200,129 @@ $(function () {
       isi();
     });
 
-    // $(document).on('click','.riwayat',function(){
-    //   let id = $(this).attr('id')
-    //   $.ajax({
-    //     url: "{{route('jalan')}}",
-    //     type: 'post',
-    //     data: {
-    //       id: id,
-    //       _token: "{{csrf_token()}}"
-    //     },
-    //     success: function (res) {
-    //       $('#no_rawat').html    ('No Rawat           : ' + res.kunjungan.no_rawat)
-    //       $('#sep').html         ('No SEP             : ' + res.kunjungan.sep)
-    //       $('#tgl_reg').html     ('Tgl Registrasi     : ' + res.kunjungan.tgl_reg)
-    //       $('#poli').html        ('Poliklinik         : ' + res.kunjungan.poli)
-    //       $('#dokter').html      ('Dokter             : ' + res.kunjungan.dokter)
-    //       $('#no_rkm_medis').html('No RM              : ' + res.kunjungan.no_rkm_medis)
-    //       $('#nm_pasien').html   ('Nama Pasien        : ' + res.kunjungan.nm_pasien)
-    //       $('#alamat').html      ('Alamat             : ' + res.kunjungan.alamat)
+    $(document).on('click','.riwayat',function(){
+      $('#data_sep').hide();
+      $('#resume').hide();
+      $('#rwt_jalan').hide();
+      $('#obat').hide();
 
-    //       let rawat_jl = res.rawat_jl_dr;
-    //       let no = 1;
+      let totalIDR = new Intl.NumberFormat('id-ID', {
+          style: 'currency',
+          currency: 'IDR',
+      });
+      
+      let id = $(this).attr('id')
+      $.ajax({
+        url: "{{route('jalan')}}",
+        type: 'post',
+        data: {
+          id: id,
+          _token: "{{csrf_token()}}"
+        },
+        success: function (res) {
 
-    //       $.each(rawat_jl, function (i, item) {
-    //           $('<tr>').append(
-    //           $('<td>').text(no),
-    //           $('<td>').text(item.tgl_perawatan),
-    //           $('<td>').text(item.nm_perawatan),
-    //           $('<td>').text(item.nm_dokter),
-    //           $('<td>').text(item.biaya_rawat)
-    //           ).appendTo('#records_table');
+          $('#sep').html         ('No SEP             : ' + res.sep.no_sep)
+          $('#tgl_sep').html    ('Tgl. SEP           : ' + res.sep.tglsep)
+          $('#no_ka').html     ('No. Kartu     : ' + res.sep.no_kartu)
+          $('#no_mr').html     ('No. Kartu     : ' + res.sep.nomr)
+          $('#nama_px').html        ('Nama Peserta         : ' + res.sep.nama_pasien)
+          $('#tgl_lhr').html      ('Tgl. Lahir             : ' + res.sep.tanggal_lahir)
+          $('#no_telp').html('No. Telepon              : ' + res.sep.notelep)
+          $('#poli').html('Sub/Poli Spesialis             : ' + res.sep.nmpolitujuan)
+          $('#dokter').html   ('Dokter        : ' + res.sep.nmdpdjp)
+          $('#perujuk').html      ('Faskes Perujuk             : ' + res.sep.nmppkrujukan)
+          $('#diagnosa').html      ('Diagnosa Awal             : ' + res.sep.nmdiagnosaawal)
+          $('#catatan').html      ('Catatan             : ' + res.sep.catatan)
+          $('#peserta').html      ('Peserta             : ' + res.sep.peserta)
+          $('#jenis').html      ('Jns. Rawat             : Rawat Jalan')
+          
+          let url = "{{ URL::asset('/template/berkas') }}/"+ res.resume.lokasi_file +"";
+          $('iframe').attr('src', url)
 
-    //           no++;
-    //       });
-    //     }
-    //   })
-    // })
+          let rawat_jl_dr = res.rawat_jl_dr;
+          let rawat_jl_pr = res.rawat_jl_pr;
+          let obat = res.obat;
 
-    change = function () {
-      $('#tabel1 tbody tr td select').change(function () {
-        var optionSelected = $(this).find("option:selected");
-        var valueSelected = optionSelected.val();
-        var textSelected = optionSelected.text();
-        let id = optionSelected.attr('data');
-      if(valueSelected == 1){
-        $('#exampleModal').modal('show');
-        $.ajax({
-          url: "{{route('jalan')}}",
-          type: 'post',
-          data: {
-            id: id,
-            _token: "{{csrf_token()}}"
-          },
-          success: function (res) {
+          let no_dr_jl = 1;
+          let no_pr_jl = 1;
+          let no_obat = 1;
 
-            let rawat_jl_dr = res.rawat_jl_dr;
-            let rawat_jl_pr = res.rawat_jl_pr;
-            let no_dr = 1;
-            let no_pr = 1;
-
-            //Tabel rawat jalan dokter
+          //Tabel rawat jalan dokter
             $.each(rawat_jl_dr, function (i, item) {
                 $('<tr>').append(
-                $('<td>').text(no_dr),
+                $('<td>').text(no_dr_jl),
                 $('<td>').text(item.tgl_perawatan),
                 $('<td>').text(item.nm_perawatan),
                 $('<td>').text(item.nm_dokter),
-                $('<td>').text(item.biaya_rawat)
-                ).appendTo('#dr_table');
+                $('<td>').text(totalIDR.format(item.biaya_rawat))
+                ).appendTo('#dr_jl_table');
 
-                no_dr++;
+                no_dr_jl++;
             });
 
-            //Tabel rawat jalan perawat
+          //Tabel rawat jalan perawat
             $.each(rawat_jl_pr, function (i, item) {
                 $('<tr>').append(
-                $('<td>').text(no_pr),
+                $('<td>').text(no_pr_jl),
                 $('<td>').text(item.tgl_perawatan),
                 $('<td>').text(item.nm_perawatan),
                 $('<td>').text(item.nm_perawat),
-                $('<td>').text(item.biaya_rawat)
-                ).appendTo('#pr_table');
+                $('<td>').text(totalIDR.format(item.biaya_rawat))
+                ).appendTo('#pr_jl_table');
 
-                no_pr++;
+                no_pr_jl++;
             });
-          }
-        })
+
+          //Tabel obat
+          $.each(obat, function (i, item) {
+              $('<tr>').append(
+              $('<td>').text(no_obat),
+              $('<td>').text(item.tgl_perawatan + " " + item.jam),
+              $('<td>').text(item.nama_brng),
+              $('<td>').text(item.jml + " " + item.satuan),
+              $('<td>').text(totalIDR.format(item.total)),
+              ).appendTo('#obat_table');
+
+              no_obat++;
+          });
+        }
+      })
+    })
+
+    $('#exampleModal').on('hidden.bs.modal', function() {
+      $('#dr_jl_table tbody').empty();
+      $('#pr_jl_table tbody').empty();
+      $('#obat_table tbody').empty();
+    })
+
+    $('#ubah').on('click', function() {
+      let dom = $('select').val();
+      
+      if (dom == 'data_sep'){
+        $('#data_sep').show();
+        $('#resume').hide();
+        $('#rwt_jalan').hide();
+        $('#obat').hide();
       }
-      else if (valueSelected == 2){
-        $('#exampleModal').modal('show');
-        $("#modal-title").text("RAWAT INAP");
-        $.ajax({
-          url: "{{route('inap')}}",
-          type: 'post',
-          data: {
-            id: id,
-            _token: "{{csrf_token()}}"
-          },
-          success: function (res) {
-
-            let rawat_inap_dr = res.rawat_inap_dr;
-            let rawat_inap_pr = res.rawat_inap_pr;
-            let no_dr = 1;
-            let no_pr = 1;
-
-            if(rawat_inap_dr > 0 && rawat_inap_pr > 0) {
-              //Tabel rawat jalan dokter
-              $.each(rawat_inap_dr, function (i, item) {
-                  $('<tr>').append(
-                  $('<td>').text(no_dr),
-                  $('<td>').text(item.tgl_perawatan),
-                  $('<td>').text(item.nm_perawatan),
-                  $('<td>').text(item.nm_dokter),
-                  $('<td>').text(item.biaya_rawat)
-                  ).appendTo('#dr_table');
-
-                  no_dr++;
-              });
-
-              //Tabel rawat jalan perawat
-              $.each(rawat_inap_pr, function (i, item) {
-                  $('<tr>').append(
-                  $('<td>').text(no_pr),
-                  $('<td>').text(item.tgl_perawatan),
-                  $('<td>').text(item.nm_perawatan),
-                  $('<td>').text(item.nm_perawat),
-                  $('<td>').text(item.biaya_rawat)
-                  ).appendTo('#pr_table');
-
-                  no_pr++;
-              });
-            }
-            else {
-              alert("Data Kosong");
-            }
-          }
-        })
+      else if (dom == 'resume') {
+        $('#data_sep').hide();
+        $('#resume').show();
+        $('#rwt_jalan').hide();
+        $('#obat').hide();
+      } 
+      else if (dom == 'rwt_jalan') {
+        $('#data_sep').hide();
+        $('#resume').hide();
+        $('#rwt_jalan').show();
+        $('#obat').hide();
       }
-    });
-  }
+      else if (dom == 'obat') {
+        $('#data_sep').hide();
+        $('#resume').hide();
+        $('#rwt_jalan').hide();
+        $('#obat').show();
+      }
+    })
 
 </script>
 @endsection

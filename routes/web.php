@@ -4,6 +4,7 @@ use App\Http\Controllers\BerkasDigital;
 use App\Http\Controllers\BerkasDigitalRanap;
 use App\Http\Controllers\Dashboard;
 use App\Http\Controllers\RiwayatController;
+use App\Http\Controllers\RiwayatInapController;
 use App\Models\BerkasDigitalPerawatan;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
@@ -39,7 +40,16 @@ Route::get('/riwayat', [RiwayatController::class, 'index']);
 Route::get('riwayat.index', [RiwayatController::class, 'index'])->name('riwayat');
 Route::post('riwayat.jalan', [RiwayatController::class, 'jalan'])->name('jalan');
 Route::post('riwayat.inap', [RiwayatController::class, 'inap'])->name('inap');
+Route::post('riwayat.total', [RiwayatController::class, 'total'])->name('total');
 Route::post('/riwayat', [RiwayatController::class, 'getDate']);
+
+//MENU RIWAYAT PERAWATAN
+Route::get('/riwayat_rn', [RiwayatInapController::class, 'index']);
+Route::get('riwayat_rn.index', [RiwayatInapController::class, 'index'])->name('riwayat_rn');
+Route::post('riwayat_rn.jalan', [RiwayatInapController::class, 'jalan'])->name('jalan_rn');
+Route::post('riwayat_rn.inap', [RiwayatInapController::class, 'inap'])->name('inap_rn');
+Route::post('riwayat_rn.total', [RiwayatInapController::class, 'total'])->name('total_rn');
+Route::post('/riwayat_rn', [RiwayatInapController::class, 'getDate']);
 
 Auth::routes();
 
