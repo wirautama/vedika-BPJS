@@ -187,11 +187,11 @@ class RiwayatController extends Controller
                 ->get()
                 ->toArray();
 
-        $resume = DB::table('simrs_khanza.berkas_digital_perawatan as a')
-                ->select('a.lokasi_file as lokasi_file')
-                ->where('a.no_rawat','=',$no_rawat)
-                ->where('a.kode','=','015')
-                ->first();
+        // $resume = DB::table('simrs_khanza.berkas_digital_perawatan as a')
+        //         ->select('a.lokasi_file as lokasi_file')
+        //         ->where('a.no_rawat','=',$no_rawat)
+        //         ->where('a.kode','=','015')
+        //         ->first();
 
         return response()->json([
                                   'sep' => $sep,
@@ -201,7 +201,7 @@ class RiwayatController extends Controller
                                   'rawat_inap_pr' => $rawat_inap_pr,
                                   'kamar' => $kamar,
                                   'obat' => $obat,
-                                  'resume' => $resume,
+                                //   'resume' => $resume,
                                 ]);
     }
 }
