@@ -245,11 +245,13 @@ $(function () {
           let rawat_inap_pr = res.rawat_inap_pr;
           let kamar = res.kamar;
           let obat = res.obat;
+          let radiologi = res.radiologi;
 
           let no_dr_in = 1;
           let no_pr_in = 1;
           let no_kamar = 1;
           let no_obat = 1;
+          let no_rad = 1;
 
           //Tabel rawat inap dokter
             $.each(rawat_inap_dr, function (i, item) {
