@@ -68,7 +68,7 @@
           <th>No.</th>
           <th>Tanggal</th>
           <th>Nama Tindakan/Perawatan</th>
-          <th>Dokter</th>
+          <th>Perawat</th>
           <th>Biaya</th>
         </tr>
         </thead>
